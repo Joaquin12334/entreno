@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Entrenos 9–10 pm | Vista simple</title>
+
+<style>
+    html, body {
+  overflow: hidden;
+}
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Para Firefox */
+html {
+  scrollbar-width: none;
+}
+  /* —— Paleta seria con acentos neon (inspiración VR/landing) —— */
+  :root{
+    --bg:#0b1020;           /* fondo profundo */
+    --panel:#0f1730;        /* panel base */
+    --ink:#eaf0ff;          /* texto principal */
+    --muted:#9fb0d4;        /* texto secundario */
+    --line:#1c2a4a;         /* bordes sutiles */
+    --cyan:#5de6ff;         /* acento cian */
+    --violet:#a16bff;       /* acento violeta */
+    --ok:#34d3a6;           /* éxito */
+    --warn:#ffb86b;         /* aviso */
+    --radius:18px;
+    --shadow:0 18px 40px rgba(7,13,35,.45);
+    
+  }
+  body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;background:radial-gradient(1200px 600px at 85% -10%, rgba(97,76,255,.25), transparent 60%), radial-gradient(1000px 500px at -10% 110%, rgba(0,205,255,.18), transparent 55%), var(--bg); color:var(--ink); overflow-x:hidden; scrollbar-width:none}
+  body::-webkit-scrollbar{width:0;height:0}
+  .wrap{max-width:860px;margin:0 auto;padding:28px 16px}
+  header{text-align:center;margin-bottom:12px}
+  .brand{font-weight:900;font-size:26px;letter-spacing:.3px}
+  .sub{color:var(--muted);font-size:14px}
+
+  /* -------- HERO superior (la zona que mostraste en la captura) -------- */
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:14px;box-shadow:var(--shadow)}
+  .top{position:relative;overflow:hidden;padding:18px 16px;border-radius:22px;background:linear-gradient(135deg, rgba(161,107,255,.18), rgba(93,230,255,.12) 55%, rgba(161,107,255,.18));border:1px solid rgba(140,170,255,.25)}
+  .top:before,.top:after{content:"";position:absolute;filter:blur(40px);opacity:.55;pointer-events:none}
+  .top:before{width:220px;height:220px;background:radial-gradient(circle at 30% 30%, rgba(161,107,255,.9), transparent 60%);left:-60px;top:-60px}
+  .top:after{width:260px;height:260px;background:radial-gradient(circle at 70% 70%, rgba(93,230,255,.85), transparent 60%);right:-80px;bottom:-90px}
+
+  .week{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap}
+  .chip{font-size:12px;color:var(--ink);background:linear-gradient(180deg, rgba(140,170,255,.22), rgba(140,170,255,.12));border:1px solid rgba(140,170,255,.35);padding:8px 12px;border-radius:999px;backdrop-filter:blur(6px)}
+
+  .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:8px}
+  .stat{display:flex;align-items:center;justify-content:center;gap:12px;padding:14px;border-radius:16px;background:linear-gradient(180deg, rgba(125,200,255,.12), rgba(125,200,255,.05));border:1px solid rgba(140,170,255,.35)}
+  .num{font-size:28px;font-weight:900;padding:6px 14px;border-radius:14px;background:linear-gradient(180deg, rgba(93,230,255,.18), rgba(161,107,255,.18));border:1px solid rgba(140,170,255,.45);box-shadow:0 0 0 4px rgba(140,170,255,.12) inset}
+  .num.ok{color:var(--ok)}
+  .num.hl{color:#bfd6ff}
+
+  .switch{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:2px}
+  .switch input{accent-color:var(--cyan)}
+
+  .nav{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:6px}
+  .btn{appearance:none;border:1px solid rgba(140,170,255,.35);background:linear-gradient(180deg, rgba(140,170,255,.10), rgba(140,170,255,.05));color:var(--ink);border-radius:14px;padding:10px 14px;cursor:pointer;backdrop-filter:blur(4px)}
+  .btn:hover{box-shadow:0 0 0 3px rgba(140,170,255,.18)}
+  .btn.primary{background:linear-gradient(135deg, var(--violet), var(--cyan));color:white;border-color:transparent;box-shadow:0 10px 26px rgba(120,140,255,.35)}
+  .btn:disabled{opacity:.55;cursor:not-allowed}
+
+  /* -------- Tarjetas del día -------- */
+  .days{margin-top:14px;display:grid;grid-template-columns:1fr;gap:14px}
+  @media (min-width:720px){.days{grid-template-columns:1fr 1fr}}
+  .title{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+  .title h3{margin:0;font-size:16px;display:flex;align-items:center;gap:8px}
+  .muscle{background:linear-gradient(90deg, var(--violet), var(--cyan)); -webkit-background-clip:text; background-clip:text; color:transparent; text-shadow:0 0 6px rgba(161,107,255,.6), 0 0 12px rgba(93,230,255,.35); animation:glow 3.2s ease-in-out infinite alternate}
+  @keyframes glow{from{text-shadow:0 0 6px rgba(161,107,255,.55),0 0 10px rgba(93,230,255,.25)}to{ text-shadow:0 0 10px rgba(161,107,255,.9),0 0 18px rgba(93,230,255,.45)}}
+  .badge{font-size:11px;padding:6px 10px;border-radius:999px;border:1px solid rgba(140,170,255,.35);color:var(--ink);background:linear-gradient(180deg, rgba(140,170,255,.16), rgba(140,170,255,.08))}
+  .badge.ok{color:var(--ok)}
+  .badge.warn{color:var(--warn)}
+
+  .ex{display:flex;gap:10px;align-items:flex-start;border:1px dashed rgba(140,170,255,.35);background:rgba(140,170,255,.06);padding:10px;border-radius:14px;margin-top:6px}
+  .ex input{accent-color:var(--cyan)}
+  .ex small{display:block;color:var(--muted)}
+
+  .actions{display:flex;gap:10px;margin-top:8px}
+  .btn.ghost{background:transparent;border-style:dashed}
+  .locked{opacity:.6}
+  .today{outline:2px dashed rgba(140,170,255,.35)}
+
+  /* Historial */
+  details.history{margin-top:14px}
+  summary{cursor:pointer}
+  .hist{display:grid;grid-template-columns:1fr;gap:12px;margin-top:8px}
+  @media (min-width:700px){.hist{grid-template-columns:1fr 1fr}}
+  .hrow{display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .bar{height:8px;width:100%;background:rgba(140,170,255,.10);border:1px solid rgba(140,170,255,.35);border-radius:999px;overflow:hidden}
+  .bar>i{display:block;height:100%;background:linear-gradient(90deg, var(--violet), var(--cyan))}
+
+  .footer{margin:14px 0 6px;text-align:center;color:var(--muted);font-size:12px}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">🏋️ Rutina 9–10 pm</div>
+      <div class="sub">Minimal, centrado y sin fines de semana</div>
+    </header>
+
+    <!-- VISTA PRINCIPAL (solo HOY y MAÑANA) -->
+    <section id="appMain">
+      <section class="panel top">
+        <div class="week"><span id="weekLabel" class="chip"></span><span class="chip">Progreso local</span></div>
+        <div class="stats">
+          <div class="stat"><span class="num ok" id="streakNow">0</span><div><b>Racha actual</b><br><span class="sub">días seguidos (entrenamiento)</span></div></div>
+          <div class="stat"><span class="num hl" id="streakBest">0</span><div><b>Mejor racha</b><br><span class="sub">máximo histórico</span></div></div>
+        </div>
+        <div class="switch"><label><input type="checkbox" id="flexWindow"> Tolerancia 30 min (8:45–10:15)</label></div>
+        <div class="nav">
+          <button class="btn" id="openAgenda">Ver agenda L–V</button>
+        </div>
+      </section>
+
+      <section id="grid" class="days"></section>
+
+      <div class="footer">Empieza siempre con <b>30 dominadas</b>. Si no salen seguidas, hazlas en bloques hasta llegar.</div>
+    </section>
+
+    <!-- VISTA AGENDA (solo ver L–V, sin interacción) -->
+    <section id="appAgenda" style="display:none">
+      <section class="panel top">
+        <div class="week"><span class="chip">Agenda semanal (L–V)</span></div>
+        <div class="nav">
+          <button class="btn" id="backHome">⟵ Volver</button>
+        </div>
+      </section>
+      <section id="agendaGrid" class="days"></section>
+      <div class="footer">Vista sólo lectura para planificar.</div>
+    </section>
+
+    <details class="panel history">
+      <summary><b>Historial de semanas</b> (últimas 8)</summary>
+      <div id="history" class="hist"></div>
+    </details>
+  </div>
+
+<script>
+// --- PLAN: sólo L–V ---
+const PLAN={
+  1:{name:"Lunes",focus:"Pecho + Tríceps",exercises:[
+    {t:"Flexiones lastradas",s:"4×10–12"},
+    {t:"Fondos en barra",s:"4×8–12"}
+  ]},
+  2:{name:"Martes",focus:"Hombros + Bíceps",exercises:[
+    {t:"Elevaciones laterales (2 kg + libros)",s:"3×12–15"},
+    {t:"Dominadas supinas (curl)",s:"4×8–10"},
+    {t:"Curl con mochila",s:"3×12–15"}
+  ]},
+  3:{name:"Miércoles",focus:"Descanso activo / Core",exercises:[
+    {t:"Elevaciones de piernas colgando",s:"3×15"}
+  ]},
+  4:{name:"Jueves",focus:"Pecho + Tríceps (variantes)",exercises:[
+    {t:"Fondos con lastre",s:"4×8–12"},
+    {t:"Flexiones diamante",s:"3×10–12"}
+  ]},
+  5:{name:"Viernes",focus:"Hombros + Bíceps (variantes)",exercises:[
+    {t:"Press militar con pausa",s:"4×8–12"},
+    {t:"Curl martillo (mancuernas)",s:"3×12–15"}
+  ]}
+};
+
+const PULLUPS={t:"30 dominadas (al inicio)",s:"1×30 total (en bloques si hace falta)"};
+
+// --- Utilidades de fecha ---
+const fmt=(d)=>d.toLocaleDateString(undefined,{weekday:'short',day:'2-digit',month:'2-digit'});
+const startOfWeek=(date)=>{const d=new Date(date);const g=d.getDay();const diff=(g===0?-6:1-g);d.setDate(d.getDate()+diff);d.setHours(0,0,0,0);return d};
+const addDays=(date,n)=>{const d=new Date(date);d.setDate(d.getDate()+n);return d};
+const ymd=(d)=>d.toISOString().slice(0,10);
+const isWeekday=(d)=>{const g=d.getDay();return g>=1&&g<=5};
+const nextWeekday=(d)=>{let x=new Date(d);do{x=addDays(x,1)}while(!isWeekday(x));return x};
+
+// Si es sábado/domingo, el "hoy efectivo" será el próximo lunes para la UI
+function effectiveToday(){
+  const t=new Date(); t.setHours(0,0,0,0);
+  if(isWeekday(t)) return t; 
+  // próximo lunes
+  const nextMon=startOfWeek(addDays(t,7));
+  return nextMon;
+}
+
+// --- Persistencia ---
+const KEY='entrenos-9-10pm-v5';
+const load=()=>JSON.parse(localStorage.getItem(KEY)||'{}');
+const save=(x)=>localStorage.setItem(KEY,JSON.stringify(x));
+const state=load();
+
+function windowStatus(now=new Date(),flex=false){const s=new Date(now);s.setHours(21,0,0,0);const e=new Date(now);e.setHours(22,0,0,0);if(flex){s.setMinutes(s.getMinutes()-15);e.setMinutes(e.getMinutes()+15)}return now>=s&&now<=e}
+
+// --- Elementos ---
+const weekLabel=document.getElementById('weekLabel');
+const grid=document.getElementById('grid');
+const historyEl=document.getElementById('history');
+const streakNowEl=document.getElementById('streakNow');
+const streakBestEl=document.getElementById('streakBest');
+const flexToggle=document.getElementById('flexWindow');
+const appMain=document.getElementById('appMain');
+const appAgenda=document.getElementById('appAgenda');
+const agendaGrid=document.getElementById('agendaGrid');
+
+// --- Eventos navegación ---
+const openAgendaBtn=document.getElementById('openAgenda');
+const backHomeBtn=document.getElementById('backHome');
+openAgendaBtn.onclick=()=>{location.hash='#agenda'};
+backHomeBtn.onclick=()=>{location.hash='#home'};
+window.addEventListener('hashchange',route);
+function route(){ if(location.hash==='#agenda'){ appMain.style.display='none'; appAgenda.style.display='block'; buildAgenda(); } else { appAgenda.style.display='none'; appMain.style.display='block'; renderMain(); } }
+
+flexToggle.checked=!!state.flex;
+flexToggle.addEventListener('change',()=>{state.flex=flexToggle.checked;save(state);refreshBadges();});
+
+// --- Streaks ---
+function isTrainingDay(d){return isWeekday(d) && PLAN[d.getDay()] && PLAN[d.getDay()].focus.toLowerCase().indexOf('descanso')===-1}
+function isDone(d){const k=ymd(d);return !!(state[k]&&state[k].done)}
+function currentStreak(max=180){let s=0;const cur=new Date();cur.setHours(0,0,0,0);for(let i=0;i<max;i++){const day=addDays(cur,-i);if(!isTrainingDay(day))continue; if(isDone(day))s++; else break;}return s}
+function bestStreak(max=365){let best=0,cur=0;const end=new Date();end.setHours(0,0,0,0);for(let i=max;i>=0;i--){const day=addDays(end,-i);if(!isTrainingDay(day))continue; if(isDone(day)){cur++;best=Math.max(best,cur)}else cur=0;}return best}
+
+function buildHistory(n=8){historyEl.innerHTML='';for(let i=0;i<n;i++){const ref=addDays(new Date(),-7*i);const monday=startOfWeek(ref);const days=[1,2,3,4,5].map(k=>addDays(monday,k-1));const train=days.filter(isTrainingDay);const done=train.filter(isDone);const pct=train.length?Math.round(100*done.length/train.length):0;const card=document.createElement('div');card.className='panel';const row=document.createElement('div');row.className='hrow';row.innerHTML=`<b>${fmt(days[0])} – ${fmt(days[4])}</b><span>${done.length}/${train.length} días</span>`;const bar=document.createElement('div');bar.className='bar';const fill=document.createElement('i');fill.style.width=pct+'%';bar.appendChild(fill);card.appendChild(row);card.appendChild(bar);historyEl.appendChild(card)}}
+
+// --- Render principal (HOY + MAÑANA) ---
+function renderMain(){
+  const t=effectiveToday();
+  const monday=startOfWeek(t);
+  weekLabel.textContent=`Semana ${fmt(addDays(monday,0))} – ${fmt(addDays(monday,4))}`;
+  grid.innerHTML='';
+
+  const show=[t, nextWeekday(t)];
+  show.forEach((d,idx)=>{
+    const plan=PLAN[d.getDay()];
+    if(!plan) return; // seguridad
+    const dayKey=ymd(d); const realToday=new Date(); realToday.setHours(0,0,0,0);
+    const isToday=(d.getTime()===realToday.getTime());
+
+    const card=document.createElement('article'); card.className='card panel'+(isToday?' today':' locked');
+    const title=document.createElement('div'); title.className='title';
+    const h=document.createElement('h3'); h.innerHTML=`${plan.name} <span class="muscle">${plan.focus}</span> • ${d.toLocaleDateString()}`;
+    const badge=document.createElement('span'); badge.className='badge'; badge.id=`badge-${dayKey}`;
+    title.appendChild(h); title.appendChild(badge); card.appendChild(title);
+
+    if(state[dayKey]&&state[dayKey].done){const done=document.createElement('span'); done.className='badge'; done.textContent='✔ Hecho'; title.appendChild(done)}
+
+    // Añadir 30 dominadas al inicio
+    const exercises=[PULLUPS, ...plan.exercises];
+    exercises.forEach((ex,idx2)=>{
+      const exKey=`${dayKey}#${idx2}`; const row=document.createElement('label'); row.className='ex';
+      const cb=document.createElement('input'); cb.type='checkbox'; cb.checked=!!state[exKey]; cb.disabled=!isToday; cb.title=isToday?'':'Solo puedes marcar el día de hoy';
+      cb.onchange=()=>{state[exKey]=cb.checked; save(state)};
+      const txt=document.createElement('div'); txt.innerHTML=`<b>${ex.t}</b><small>${ex.s}</small>`;
+      row.appendChild(cb); row.appendChild(txt); card.appendChild(row);
+    });
+
+    const actions=document.createElement('div'); actions.className='actions';
+    const mark=document.createElement('button'); mark.className='btn primary grow'; mark.textContent='Marcar día HECHO'; mark.id=`btn-${dayKey}`; mark.disabled=!isToday; mark.title=isToday?'':'Solo hoy';
+    mark.onclick=()=>{state[dayKey]={done:true,ts:Date.now()}; save(state); renderMain(); updateStreaks(); buildHistory();};
+    const reset=document.createElement('button'); reset.className='btn'; reset.textContent='Reiniciar'; reset.disabled=!isToday; reset.title=isToday?'':'Solo hoy';
+    reset.onclick=()=>{exercises.forEach((_,idx2)=>delete state[`${dayKey}#${idx2}`]); if(state[dayKey]) delete state[dayKey]; save(state); renderMain();};
+    actions.appendChild(mark); actions.appendChild(reset); card.appendChild(actions);
+
+    grid.appendChild(card);
+  });
+
+  refreshBadges(); updateStreaks(); buildHistory();
+}
+
+// --- Render agenda (L–V, sólo ver) ---
+function buildAgenda(){
+  const t=effectiveToday(); const monday=startOfWeek(t); agendaGrid.innerHTML='';
+  [1,2,3,4,5].forEach(k=>{const d=addDays(monday,k-1); const plan=PLAN[k]; const card=document.createElement('article'); card.className='card panel';
+    const title=document.createElement('div'); title.className='title'; const h=document.createElement('h3'); h.innerHTML=`${plan.name} <span class="muscle">${plan.focus}</span> • ${d.toLocaleDateString()}`; const badge=document.createElement('span'); badge.className='badge'; badge.textContent=plan.focus; title.appendChild(h); title.appendChild(badge); card.appendChild(title);
+    const exercises=[PULLUPS, ...plan.exercises];
+    exercises.forEach(ex=>{const row=document.createElement('div'); row.className='ex'; const dot=document.createElement('div'); dot.style.width='10px'; dot.style.height='10px'; dot.style.borderRadius='50%'; dot.style.border='1px solid var(--line)'; row.appendChild(dot); const txt=document.createElement('div'); txt.innerHTML=`<b>${ex.t}</b><small>${ex.s}</small>`; row.appendChild(txt); card.appendChild(row);});
+    agendaGrid.appendChild(card); });
+}
+
+// --- Badges y rachas ---
+function refreshBadges(){
+  const realNow=new Date(); const inWindow=windowStatus(realNow, !!state.flex);
+  document.querySelectorAll('[id^="badge-"]').forEach(el=>{ const k=el.id.replace('badge-',''); const d=new Date(k); const isToday=(new Date().toDateString()===d.toDateString());
+    if(isToday && inWindow){el.textContent='Dentro 9–10'; el.className='badge ok'}
+    else if(isToday && !inWindow){el.textContent=(state.flex?'Fuera 8:45–10:15':'Fuera 9–10'); el.className='badge warn'}
+    else {el.textContent='Bloqueado'; el.className='badge'}
+  });
+}
+
+function updateStreaks(){
+  const now=currentStreak(); const best=bestStreak();
+  streakNowEl.textContent=now; streakBestEl.textContent=Math.max(best,now);
+}
+
+// --- Loop actualización ventana ---
+setInterval(()=>{refreshBadges(); updateStreaks();},30000);
+
+// --- Inicio ---
+function boot(){ route(); }
+boot();
+</script>
+</body>
+</html>
